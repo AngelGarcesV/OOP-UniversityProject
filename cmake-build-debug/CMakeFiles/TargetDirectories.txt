@@ -1,0 +1,3 @@
+C:/Users/Angel Garces/Desktop/po final creo/cmake-build-debug/CMakeFiles/po_final_creo.dir
+C:/Users/Angel Garces/Desktop/po final creo/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Angel Garces/Desktop/po final creo/cmake-build-debug/CMakeFiles/rebuild_cache.dir
