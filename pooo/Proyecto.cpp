@@ -315,7 +315,7 @@ public:
     virtual string getTipoContrato() = 0;
 };
 
-class Lugar
+class  Lugar
 {
 protected:
     string NombreLugar;
@@ -2143,6 +2143,9 @@ int main()
     vector<Espectador *> especta = {};
     vector<Seguridad *> seguridad = {};
     vector<Policia *> policias = {};
+    vector<VendedorTienda*> vendedores = {};
+    vector<Evento*> eventos = {};
+
 
     string festival = "";
     int opc = 0;
@@ -2213,7 +2216,7 @@ int main()
                 }
                 cout << "solo falta el genero de la banda: ";
                 cin >> genero;
-                agrupacionMusical *a1 = new banda(nombre, id, numIntegrantes, musicians, genero);
+                listaAgrupacion.push_back(new banda(nombre,id,numIntegrantes,musicians,genero));
             }
             else if (opcAgrupacionMusical == 2)
             {
@@ -2258,7 +2261,8 @@ int main()
                 }
                 cout << "ahora solo falta el tipo de orquesta: ";
                 cin >> tipoOrquesta;
-                agrupacionMusical *a1 = new orquesta(nombre, id, numIntegrantes, musicians, tipoOrquesta);
+                listaAgrupacion.push_back(new orquesta(nombre,id,numIntegrantes,musicians,tipoOrquesta));
+                cout<< "Se ha agregado una orquesta"<<endl;
             }
         }
 
@@ -2266,7 +2270,7 @@ int main()
         {
             //-------falta la composición------//
 
-            string nombreLugar = "", direccion = "", ciudad = "", titulo = "";
+            string nombreLugar = "", direccion = "", ciudad = "", titulo = "",dia ="", mes = "", año="";
             double capacidadMinima = 0, capacidadMaxima = 0;
             int TiendasDisponibles = 0;
             cout << "HOLAA!!, Aca planearemos nuestro festival" << endl;
@@ -2292,7 +2296,48 @@ int main()
             cin >> titulo;
             cout << "Numero de tiendas disponibles";
             cin >> TiendasDisponibles;
-            // Evento ev = Evento(nombreLugar,capacidadMinima,capacidadMaxima,direccion,ciudad,titulo,TiendasDisponibles);
+            cout<< "Ingrese el dia del evento: "<<endl;
+            cin>>dia;
+            cout<< "ingrese el mes del evento"<<endl;
+            cin>>mes;
+            cout<< "ingrese el del evento año";
+            int numVendedores = 0,idTienda = 0;
+            string nombreProducto,marca;
+            int numProductos = 0, precio = 0;
+            cout<<"ingrese el numero de prductos en el inventario";
+            cin>>numProductos;
+            for(int i = 0; i<= numProductos;i++){
+                cout<< "ingrese el nombre del producto"<<endl;
+                cin>>nombreProducto;
+                cout<< "ingrese el precio del producto: "<<endl;
+                cin>>precio;
+                cout<< "ingrese la marca: "<<endl;
+                cin>>marca;
+                int opcProductos = 0;
+                int calorias = 0, azucar = 0;
+                cout<< "1. comida\n 2. bebida"<<endl;
+                cin>>opcProductos;
+                if(opcProductos == 1){
+                    cout<<"ingrese las calorias de la comimda: "<<endl;
+                    inventario.push_back(new comida(nombreProducto,precio,marca,calorias));
+                }else{
+                    cout<< "ingrese el azucar de la bebida: ";
+                    cin>>azucar;
+                    inventario.push_back(new bebida(nombreProducto,precio,marca,calorias));
+                }
+            }
+            int idvendedor = 0;
+            string nombreVendedor ="";
+            cout<<"Ingrese el numero de vendedores de tiendas que posee el evento: "<<endl;
+            cin>>numVendedores;
+            for(int i = 0; i <= numVendedores; i++){
+                cout<< "ingrese el id del vendedor: ";
+                cin>>idvendedor;
+                cout<< "ingrese nombre: ";
+                cin>>nombreVendedor;
+                vendedores.push_back( new VendedorTienda(idvendedor,nombreVendedor,inventario));
+            }
+               //    eventos.push_back(new Evento(nombreLugar,capacidadMinima,capacidadMaxima,direccion,ciudad,titulo,TiendasDisponibles,vendedores,dia,mes,año));
         }
 
         else if (opc == 3)
@@ -2313,9 +2358,9 @@ int main()
             cout << "Año de creacion de la empresa";
             cin >> añoDeCreacion;
 
-            Patrocinador p1 = Patrocinador(id, nombre, edad, nombreEmpresa, añoDeCreacion);
+            patro.push_back(new Patrocinador(id,nombre,edad,nombreEmpresa,añoDeCreacion));
 
-            cout << "Perfecto, se a agregado el patrocinador " << p1.getnombre() << endl;
+
         }
 
         else if (opc == 4)
@@ -2432,7 +2477,7 @@ int main()
 
         else if (opc == 6)
         {
-            string nombre = "", usuario = "", contraseña = "";
+            string nombre = "", usuario = "", contraseña = "",cargo = "";
             int id = 0, edad = 0, idTrabajador = 0, opcEmpleado = 0, opcVendedor = 0;
             cout << "--------AGREGAR UN EMPLEADO--------" << endl
                  << endl;
@@ -2454,6 +2499,9 @@ int main()
                 cin >> usuario;
                 cout << "Escribe la contraseña del empleado: " << endl;
                 cin >> contraseña;
+                cout<< "ingrese el cargo del trabajador: "<<endl;
+                cin>>cargo;
+                listaEmpleados.push_back(new Logistica(id,nombre,edad,idTrabajador,usuario,contraseña,cargo));
             }
             else if (opcEmpleado == 2)
             {
@@ -2534,6 +2582,7 @@ int main()
                         boleterias.push_back(new BoletoVip(id, dia, mes, anio, "no", true));
                     }
                 }
+                listaEmpleados.push_back(new VendedorEntradas(id,nombre,edad,idTrabajador,usuario,contraseña,boleterias));
             }
         }
         else if (opc == 7)
@@ -2681,23 +2730,25 @@ int main()
             cout << "--------MOSTRAR AGRUPACION MUSICAL--------" << endl <<endl;
             for(agrupacionMusical* aM: listaAgrupacion)
             {
-             cout << *aM << endl;
-            }
+                aM->print();
+            }system("pause");
 
         }
         else if(opc == 12)
         {
-            cout << "--------MOSTRAR INVENTARIO DE PRODUCTOS--------" << endl <<endl;
-            for(producto* p: inventario)
+            cout << "--------MOSTRAR PATROCINADORES--------" << endl <<endl;
+            for(Patrocinador* p: patro)
             {
-                cout << *p << endl;
+                p->print();
             }
+            system("pause");
         }else if(opc == 13)
         {
             cout << "--------MOSTRAR LISTADO DE EMPLEADOS--------" << endl << endl;
             for (Empleado *e: listaEmpleados) {
-                cout << *e << endl;
+                e->print();
             }
+            system("pause");
         }
     }
 
